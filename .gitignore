@@ -16,7 +16,7 @@
 *.ap_
 *.aab
 /.idea
-docs
+docs/
 build/
 app/build/
 .idea/
