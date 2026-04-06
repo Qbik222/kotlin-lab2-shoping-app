@@ -17,3 +17,6 @@
 *.aab
 /.idea
 docs
+build/
+app/build/
+.idea/
