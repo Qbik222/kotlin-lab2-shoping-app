@@ -15,3 +15,5 @@
 *.apk
 *.ap_
 *.aab
+/.idea
+docs

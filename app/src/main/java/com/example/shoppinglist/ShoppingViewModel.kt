@@ -147,6 +147,12 @@ class ShoppingViewModel(
         }
     }
 
+    fun deleteItem(id: String) {
+        viewModelScope.launch {
+            repository.deleteById(id)
+        }
+    }
+
     fun setFilter(filter: FilterType) {
         _filter.value = filter
         _page.value = 1

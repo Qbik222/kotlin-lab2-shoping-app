@@ -40,6 +40,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.shoppinglist.FilterType
@@ -114,6 +115,7 @@ fun ShoppingScreen(viewModel: ShoppingViewModel) {
             AnimatedListBlock(
                 state = state,
                 onToggle = { id, bought -> viewModel.toggleBought(id, bought) },
+                onDelete = viewModel::deleteItem,
                 onLoadMore = { viewModel.loadMore() },
             )
         }
@@ -132,7 +134,9 @@ private fun RowInputs(
         OutlinedTextField(
             value = name,
             onValueChange = onNameChange,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(UiTestTags.INPUT_NAME),
             label = { Text("Назва товару") },
             singleLine = true,
         )
@@ -144,11 +148,18 @@ private fun RowInputs(
             OutlinedTextField(
                 value = quantity,
                 onValueChange = onQuantityChange,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .testTag(UiTestTags.INPUT_QUANTITY),
                 label = { Text("Кількість") },
                 singleLine = true,
             )
-            Button(onClick = onAdd, modifier = Modifier.padding(top = 8.dp)) {
+            Button(
+                onClick = onAdd,
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .testTag(UiTestTags.BTN_ADD),
+            ) {
                 Text("Додати")
             }
         }
@@ -217,6 +228,7 @@ private fun SortRow(
 private fun AnimatedListBlock(
     state: ShoppingUiState,
     onToggle: (String, Boolean) -> Unit,
+    onDelete: (String) -> Unit,
     onLoadMore: () -> Unit,
 ) {
     val listKey = "${state.filter}-${state.sort}"
@@ -252,6 +264,7 @@ private fun AnimatedListBlock(
                         ShoppingItemRow(
                             item = item,
                             onToggle = { checked -> onToggle(item.id, checked) },
+                            onDelete = { onDelete(item.id) },
                         )
                     }
                     item {
