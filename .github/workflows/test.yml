@@ -1,5 +1,6 @@
 # GitHub Actions: збірка модуля app та інструментовані тести (ЛР3).
-# Результати Gradle та тестів видно у вкладці Actions → відповідний run → job logs.
+# macOS: QEMU arm64 падає з HV_UNSUPPORTED (немає HVF на раннерах).
+# ubuntu-latest + x86_64 + ПЗ-прискорення: повільно, але емулятор зазвичай догружається.
 
 name: Android tests
 
@@ -10,9 +11,8 @@ on:
 
 jobs:
   instrumented-tests:
-    # На GitHub macOS HVF часто HV_UNSUPPORTED (немає nested virt). -accel off → TCG, повільно але стартує.
-    runs-on: macos-latest
-    timeout-minutes: 90
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
 
     steps:
       - name: Checkout
@@ -43,8 +43,11 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 34
-          arch: arm64-v8a
+          arch: x86_64
           target: google_apis
-          emulator-boot-timeout: 1200
+          enable-hw-acceleration: false
+          emulator-boot-timeout: 1800
           emulator-options: -accel off -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
-          script: ./gradlew connectedDebugAndroidTest --stacktrace --no-daemon
+          script: |
+            sleep 45
+            ./gradlew connectedDebugAndroidTest --stacktrace --no-daemon
