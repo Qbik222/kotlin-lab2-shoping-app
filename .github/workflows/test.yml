@@ -1,6 +1,6 @@
 # GitHub Actions: збірка модуля app та інструментовані тести (ЛР3).
-# macOS: QEMU arm64 падає з HV_UNSUPPORTED (немає HVF на раннерах).
-# ubuntu-latest + x86_64 + ПЗ-прискорення: повільно, але емулятор зазвичай догружається.
+# На ubuntu-latest x86_64 AVD без KVM (немає nested KVM) бутує через TCG і часто
+# «зависає» в adb offline. macos-latest + arm64-v8a AVD — стабільний шлях на GitHub-hosted (Apple Silicon).
 
 name: Android tests
 
@@ -11,7 +11,7 @@ on:
 
 jobs:
   instrumented-tests:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     timeout-minutes: 120
 
     steps:
@@ -43,11 +43,9 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 34
-          arch: x86_64
+          arch: arm64-v8a
           target: google_apis
-          disable-linux-hw-accel: true
           emulator-boot-timeout: 1800
-          emulator-options: -accel off -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           script: |
-            sleep 45
             ./gradlew connectedDebugAndroidTest --stacktrace --no-daemon
