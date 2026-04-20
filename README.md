@@ -58,7 +58,7 @@ gradlew.bat connectedDebugAndroidTest
 
 ## GitHub Actions (CI)
 
-Після пушу в GitHub на **кожен `push` і `pull_request`** запускається workflow [`.github/workflows/test.yml`](.github/workflows/test.yml):
+Workflow [`.github/workflows/test.yml`](.github/workflows/test.yml) запускається на **кожен `push` і `pull_request`**, а також **вручну** (`workflow_dispatch`): GitHub → **Actions** → **Android tests** → **Run workflow** → вибір гілки → **Run workflow**.
 
 | Крок | Що робить |
 |------|-----------|
