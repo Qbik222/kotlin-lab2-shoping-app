@@ -10,10 +10,9 @@ on:
 
 jobs:
   instrumented-tests:
-    # ubuntu-latest без KVM: x86-емулятор у софтвері, довгий boot, pm/settings → Broken pipe при install APK.
-    # macos-latest (Apple Silicon) + arm64-v8a — стабільніший AVD для CI.
+    # На GitHub macOS HVF часто HV_UNSUPPORTED (немає nested virt). -accel off → TCG, повільно але стартує.
     runs-on: macos-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
 
     steps:
       - name: Checkout
@@ -46,4 +45,6 @@ jobs:
           api-level: 34
           arch: arm64-v8a
           target: google_apis
+          emulator-boot-timeout: 1200
+          emulator-options: -accel off -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           script: ./gradlew connectedDebugAndroidTest --stacktrace --no-daemon
