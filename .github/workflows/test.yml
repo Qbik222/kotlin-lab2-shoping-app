@@ -45,7 +45,7 @@ jobs:
           api-level: 34
           arch: x86_64
           target: google_apis
-          enable-hw-acceleration: false
+          disable-linux-hw-accel: true
           emulator-boot-timeout: 1800
           emulator-options: -accel off -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           script: |

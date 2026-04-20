@@ -65,7 +65,7 @@ Workflow [`.github/workflows/test.yml`](.github/workflows/test.yml) запуск
 | **Checkout** | Клонує репозиторій |
 | **Python 3.12** | Налаштування середовища (вимога ЛР: Java + Python); версія виводиться в лог |
 | **JDK 17** (Eclipse Temurin) | Збірка Kotlin/Android; кеш Gradle |
-| **Android Emulator** | **Ubuntu** runner, API 34, `x86_64`, Google APIs, **без апаратного прискорення** (`enable-hw-acceleration: false`, `-accel off`). На безкоштовному GitHub **немає KVM/HVF** — macOS давав `HV_UNSUPPORTED`. Перший бут часто **20–35 хв**; після буту додано **45 с** паузи перед Gradle (стабільніше встановлення APK). |
+| **Android Emulator** | **Ubuntu** runner, API 34, `x86_64`, Google APIs, **`disable-linux-hw-accel: true`** та **`-accel off`** (KVM на безкоштовному GitHub немає; macOS давав `HV_UNSUPPORTED`). Перший бут часто **20–35 хв**; після буту **45 с** паузи перед Gradle. |
 | **Gradle** | `./gradlew connectedDebugAndroidTest` — інструментовані тести ЛР3 |
 
 **Де дивитися результат:** репозиторій на GitHub → **Actions** → останній запуск workflow **Android tests** → job **instrumented-tests** → розгорнути кроки; звіт про тести та помилки — у логах Gradle.
