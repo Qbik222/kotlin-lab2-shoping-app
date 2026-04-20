@@ -10,8 +10,10 @@ on:
 
 jobs:
   instrumented-tests:
-    runs-on: ubuntu-latest
-    timeout-minutes: 45
+    # ubuntu-latest без KVM: x86-емулятор у софтвері, довгий boot, pm/settings → Broken pipe при install APK.
+    # macos-latest (Apple Silicon) + arm64-v8a — стабільніший AVD для CI.
+    runs-on: macos-latest
+    timeout-minutes: 60
 
     steps:
       - name: Checkout
@@ -42,6 +44,6 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 34
-          arch: x86_64
+          arch: arm64-v8a
           target: google_apis
           script: ./gradlew connectedDebugAndroidTest --stacktrace --no-daemon
