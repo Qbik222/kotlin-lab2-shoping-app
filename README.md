@@ -53,3 +53,21 @@ gradlew.bat connectedDebugAndroidTest
 ```
 
 Остання команда потребує запущеного емулятора або пристрою (інструментовані тести).
+
+---
+
+## GitHub Actions (CI)
+
+Після пушу в GitHub на **кожен `push` і `pull_request`** запускається workflow [`.github/workflows/test.yml`](.github/workflows/test.yml):
+
+| Крок | Що робить |
+|------|-----------|
+| **Checkout** | Клонує репозиторій |
+| **Python 3.12** | Налаштування середовища (вимога ЛР: Java + Python); версія виводиться в лог |
+| **JDK 17** (Eclipse Temurin) | Збірка Kotlin/Android; кеш Gradle |
+| **Android Emulator** | API 34, `x86_64`, Google APIs |
+| **Gradle** | `./gradlew connectedDebugAndroidTest` — інструментовані тести ЛР3 |
+
+**Де дивитися результат:** репозиторій на GitHub → **Actions** → останній запуск workflow **Android tests** → job **instrumented-tests** → розгорнути кроки; звіт про тести та помилки — у логах Gradle.
+
+Якщо workflow червоний, перевірте лог кроку **Run instrumented tests on emulator** (там повний `--stacktrace` від Gradle).
